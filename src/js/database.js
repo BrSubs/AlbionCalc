@@ -75,7 +75,7 @@ export const RESOURCE_TYPES = {
   },
   STONE: {
     name: "Pedra / Bloco de Pedra",
-    bruto_prefix: "T{tier}_STONE",
+    bruto_prefix: "T{tier}_ROCK",
     refinado_prefix: "T{tier}_STONEBLOCK"
   }
 };
