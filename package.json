@@ -1,0 +1,9 @@
+{
+  "name": "albion-calc",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Calculadora de refino de Albion Online",
+  "scripts": {
+    "test": "node --test tests/engine.test.js"
+  }
+}

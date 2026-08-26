@@ -1,0 +1,513 @@
+/* CSS Principal - Albion Calc
+   Estilo Premium Dark Minimalista, Mobile-First e Responsivo */
+
+:root {
+  /* Cores de Fundo */
+  --bg-primary: #0c0c0e;      /* Preto profundo para telas OLED */
+  --bg-card: #151519;         /* Cinza escuro para seções/cards */
+  --bg-input: #1f1f25;        /* Input e botões escuros */
+  --border-color: #232329;    /* Linhas finas de divisão */
+
+  /* Cores Semânticas de Dados */
+  --color-gold: #dfb15b;      /* Foco / Destaques */
+  --color-silver: #cccccc;    /* Valores padrão */
+  --color-profit: #2ec4b6;    /* Lucro Positivo (Verde Esmeralda) */
+  --color-loss: #e71d36;      /* Prejuízo/Imposto (Vermelho) */
+
+  /* Idade dos Preços (Semáforo) */
+  --age-fresh: #2ec4b6;       /* Preço recente (< 30m) */
+  --age-stale: #ffb703;       /* Preço intermediário (< 3h) */
+  --age-old: #e71d36;         /* Preço antigo (> 24h) */
+
+  /* Fontes */
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Reset Básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: #f1f1f3;
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 8px;
+}
+
+/* 1. Cabeçalho Principal (Menu Nível 1) */
+.app-header {
+  border-bottom: 1px solid var(--border-color);
+  padding: 4px 0 8px 0;
+  margin-bottom: 8px;
+}
+
+.main-tabs {
+  display: flex;
+  background-color: var(--bg-card);
+  border-radius: 8px;
+  padding: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #8c8c96;
+  font-weight: 600;
+  padding: 10px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  height: 44px; /* Touch target */
+}
+
+.tab-btn.active {
+  background-color: var(--bg-input);
+  color: #fff;
+}
+
+.tab-btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 2. Sub-Navegação (Recursos Nível 2) */
+.resource-nav {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+}
+
+.resource-nav::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.res-btn {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: #a0a0a5;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-weight: 500;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  height: 38px;
+}
+
+.res-btn.active {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  background-color: rgba(223, 177, 91, 0.05);
+}
+
+/* 3. Seletor de Tiers */
+.tier-selector {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 4px;
+  margin-bottom: 12px;
+}
+
+.tier-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #8c8c96;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 6px;
+  height: 44px; /* Touch target */
+  transition: all 0.2s ease;
+}
+
+.tier-btn.active {
+  background-color: var(--color-gold);
+  color: #000;
+}
+
+/* 4. Painel de Configurações (Acordeão) */
+.config-section {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.config-details {
+  width: 100%;
+}
+
+.config-summary {
+  padding: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  list-style: none;
+  user-select: none;
+}
+
+.config-summary::-webkit-details-marker {
+  display: none;
+}
+
+.config-grid {
+  padding: 12px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Switches & Inputs */
+.toggle-group {
+  display: flex;
+  gap: 16px;
+}
+
+.switch-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  height: 44px; /* Touch target area height */
+}
+
+.switch-label input {
+  display: none;
+}
+
+.switch-custom {
+  width: 38px;
+  height: 20px;
+  background-color: var(--bg-input);
+  border-radius: 10px;
+  position: relative;
+  transition: background-color 0.2s ease;
+  border: 1px solid var(--border-color);
+}
+
+.switch-custom::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background-color: #a0a0a5;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all 0.2s ease;
+}
+
+.switch-label input:checked + .switch-custom {
+  background-color: var(--color-gold);
+}
+
+.switch-label input:checked + .switch-custom::after {
+  left: 20px;
+  background-color: #000;
+}
+
+.focus-gold {
+  color: var(--color-gold);
+  font-weight: bold;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.input-group label {
+  font-size: 12px;
+  color: #a0a0a5;
+}
+
+.input-group input {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  height: 44px; /* Touch target */
+  padding: 0 12px;
+  font-size: 14px;
+  outline: none;
+}
+
+.input-group input:focus {
+  border-color: var(--color-gold);
+}
+
+/* Cidades grid checkboxes */
+.cities-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cities-group .section-title {
+  font-size: 12px;
+  color: #a0a0a5;
+}
+
+.cities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.city-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  height: 44px; /* Touch target area height */
+}
+
+.city-check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-gold);
+  cursor: pointer;
+}
+
+/* 5. Card de Decisão e Rota */
+.decision-card {
+  background-color: #171c1b;
+  border: 1px solid rgba(46, 196, 182, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.decision-title {
+  display: block;
+  font-weight: 700;
+  color: var(--color-profit);
+  font-size: 13px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.decision-text {
+  font-size: 13px;
+  color: #e1e1e4;
+  line-height: 1.4;
+}
+
+/* 6. Tabela Principal (Tabela de Dados) */
+.table-container {
+  overflow-x: auto;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.refine-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.refine-table th,
+.refine-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.refine-table th {
+  background-color: rgba(255, 255, 255, 0.02);
+  color: #a0a0a5;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* Células customizadas */
+.item-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+}
+
+.item-icon {
+  width: 32px;
+  height: 32px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+.city-cell {
+  font-size: 12px;
+  color: #a0a0a5;
+}
+
+/* Células de preços editáveis */
+.price-cell {
+  position: relative;
+}
+
+.price-input {
+  width: 100%;
+  max-width: 80px;
+  background: none;
+  border: 1px solid transparent;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  outline: none;
+  border-radius: 4px;
+  padding: 4px 6px;
+  height: 38px;
+}
+
+.price-input:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-color: var(--border-color);
+}
+
+.price-input:focus {
+  background-color: var(--bg-primary);
+  border-color: var(--color-gold);
+}
+
+/* Idade do preço */
+.price-age {
+  display: block;
+  font-size: 10px;
+  margin-top: 1px;
+  font-weight: normal;
+}
+
+.age-fresh { color: var(--age-fresh); }
+.age-stale { color: var(--age-stale); }
+.age-old { color: var(--age-old); }
+
+/* Célula de lucro */
+.profit-cell {
+  font-weight: 700;
+  font-size: 13px;
+  text-align: center;
+  padding-right: 12px;
+}
+
+.profit-positive {
+  color: var(--color-profit);
+}
+
+.profit-negative {
+  color: var(--color-loss);
+}
+
+.percent-label {
+  display: block;
+  font-size: 10px;
+  font-weight: normal;
+  opacity: 0.8;
+}
+
+/* 7. Rodapé / Botão de Reset */
+.app-footer {
+  margin-top: auto;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-secondary {
+  width: 100%;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: #a0a0a5;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 44px; /* Touch target */
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-input);
+  color: #fff;
+}
+
+.footer-info {
+  font-size: 11px;
+  color: #55555e;
+}
+
+/* Skeleton Loading Pulso */
+.loading-skeleton {
+  animation: pulse 1.5s infinite ease-in-out;
+  background-color: var(--border-color);
+  height: 18px;
+  border-radius: 4px;
+  width: 70%;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.4; }
+}
+
+/* Responsividade Desktop */
+@media (min-width: 768px) {
+  .app-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  /* Grid layout no Desktop */
+  .app-header, .resource-nav, .tier-selector {
+    grid-column: span 2;
+  }
+
+  .main-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .config-section {
+    grid-column: 1;
+  }
+
+  .main-content, .decision-card {
+    grid-column: 2;
+  }
+}
