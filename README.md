@@ -65,15 +65,17 @@ No desktop, os controles ficam em uma sidebar fixa e aberta. Em telas menores, a
 
 ## Como executar
 
-O projeto é uma aplicação web estática, sem backend próprio.
+O projeto é uma aplicação web estática, sem backend próprio, e pode ser utilizado de duas formas.
 
-### Execução rápida
+### Acesso pelo GitHub Pages
 
-Abra o arquivo `index.html` em um navegador moderno.
+A aplicação está disponível online pelo GitHub Pages:
 
-### Servidor local
+**[Abrir o Albion Calc](https://brsubs.github.io/AlbionCalc/)**
 
-Para desenvolver com módulos ES6 e evitar restrições do navegador, sirva a pasta do projeto com qualquer servidor HTTP local. Por exemplo, usando o recurso **Live Server** do VS Code.
+### Execução local com Live Server
+
+Para executar localmente, abra a pasta do projeto no VS Code e use a extensão **Live Server** para abrir o arquivo `index.html`. Isso inicia um servidor HTTP local adequado para os módulos ES6.
 
 Depois, abra o endereço fornecido pelo servidor, normalmente:
 
