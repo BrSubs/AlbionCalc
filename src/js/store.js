@@ -24,7 +24,8 @@ const DEFAULT_PREFERENCES = {
     STONE: 500
   },
   recursoAtivo: "ORE", // ORE, WOOD, HIDE, FIBER, STONE
-  tierAtivo: 3 // T2 a T8
+  tierAtivo: 3, // T2 a T8
+  encantamentosSelecionados: [0] // .0 selecionado por padrão
 };
 
 /**

@@ -17,23 +17,28 @@
       </div>
     </header>
 
-    <!-- 2. Sub-Navegação (Navegação SPA Nível 2 - Recursos) -->
-    <nav class="resource-nav" id="resource-selector">
-      <button class="res-btn active" data-res="ORE">Minério</button>
-      <button class="res-btn" data-res="WOOD">Madeira</button>
-      <button class="res-btn" data-res="HIDE">Couro</button>
-      <button class="res-btn" data-res="FIBER">Fibra</button>
-      <button class="res-btn" data-res="STONE">Pedra</button>
-    </nav>
-
     <!-- Layout principal: coluna de config (esquerda no desktop) + coluna de conteúdo (direita) -->
     <div class="main-layout">
 
       <!-- 3. Painel de Configurações (Acordeão Colapsável) -->
       <section class="config-section">
-        <details class="config-details">
-          <summary class="config-summary">⚙️ Configurações e Filtros</summary>
+        <details class="config-details" id="config-details">
+          <summary class="config-summary">
+            <span class="config-summary-text">⚙️ Configurações e Filtros</span>
+          </summary>
           <div class="config-grid">
+
+            <!-- Seleção do recurso analisado -->
+            <div class="resource-filter">
+              <span class="section-title"> </span>
+              <nav class="resource-nav" id="resource-selector" aria-label="Tipo de recurso">
+                <button class="res-btn active" data-res="ORE">Minério</button>
+                <button class="res-btn" data-res="WOOD">Madeira</button>
+                <button class="res-btn" data-res="HIDE">Couro</button>
+                <button class="res-btn" data-res="FIBER">Fibra</button>
+                <button class="res-btn" data-res="STONE">Pedra</button>
+              </nav>
+            </div>
 
             <!-- Seletor de Tiers (Abas Rápidas) -->
             <div class="tier-selector" id="tier-selector">
@@ -44,6 +49,17 @@
               <button class="tier-btn" data-tier="6">T6</button>
               <button class="tier-btn" data-tier="7">T7</button>
               <button class="tier-btn" data-tier="8">T8</button>
+            </div>
+
+            <!-- Filtro opcional de encantamentos; vazio significa exibir todos -->
+            <div class="enchantment-filter" id="enchantment-filter">
+              <div class="enchantment-options">
+                <label class="enchantment-check"><input type="checkbox" class="enchantment-filter-input" value="0"> .0</label>
+                <label class="enchantment-check"><input type="checkbox" class="enchantment-filter-input" value="1"> .1</label>
+                <label class="enchantment-check"><input type="checkbox" class="enchantment-filter-input" value="2"> .2</label>
+                <label class="enchantment-check"><input type="checkbox" class="enchantment-filter-input" value="3"> .3</label>
+                <label class="enchantment-check"><input type="checkbox" class="enchantment-filter-input" value="4"> .4</label>
+              </div>
             </div>
 
             <!-- Premium & Foco Switches -->
@@ -80,13 +96,16 @@
               </div>
             </div>
 
+            <div class="config-reset">
+              <button class="btn-secondary" id="btn-reset-prices">Redefinir preços</button>
+            </div>
+
           </div>
         </details>
       </section>
 
       <!-- Coluna de conteúdo: decisão + tabela -->
       <div class="content-column">
-
         <!-- 5. Painel de Tomada de Decisão (Melhor Rota) -->
         <section class="decision-card" id="decision-card">
           <div class="decision-content">
@@ -106,6 +125,7 @@
                   <th>Insumo Bruto</th>
                   <th>Insumo Refinado</th>
                   <th>Preço Venda</th>
+                  <th>Custo Unitário</th>
                   <th>Lucro Unitário</th>
                 </tr>
               </thead>
@@ -124,7 +144,6 @@
 
     <!-- 7. Rodapé / Botão de Reset de Preços -->
     <footer class="app-footer">
-      <button class="btn-secondary" id="btn-reset-prices">🔄 Redefinir Preços para Padrão da API</button>
       <div class="footer-info">Dados obtidos via AODP.</div>
     </footer>
 

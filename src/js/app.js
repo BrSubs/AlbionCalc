@@ -21,6 +21,7 @@ const elements = {
   txtTaxaEstacao: document.getElementById('txt-taxa-estacao'),
   resourceSelector: document.getElementById('resource-selector'),
   tierSelector: document.getElementById('tier-selector'),
+  enchantmentFilter: document.getElementById('enchantment-filter'),
   tableBody: document.getElementById('table-body'),
   decisionText: document.getElementById('decision-text'),
   btnResetPrices: document.getElementById('btn-reset-prices'),
@@ -29,6 +30,7 @@ const elements = {
 
 // Inicialização ao carregar o documento
 document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('config-details').open = window.matchMedia('(min-width: 768px)').matches;
   activePreferences = getPreferences();
   applyPreferencesToUI();
   setupEventListeners();
@@ -51,6 +53,13 @@ function applyPreferencesToUI() {
   // Botões de Tier
   document.querySelectorAll('.tier-btn').forEach(btn => {
     btn.classList.toggle('active', Number(btn.dataset.tier) === activePreferences.tierAtivo);
+  });
+
+  const selectedEnchantments = Array.isArray(activePreferences.encantamentosSelecionados)
+    ? activePreferences.encantamentosSelecionados
+    : [];
+  document.querySelectorAll('.enchantment-filter-input').forEach(input => {
+    input.checked = selectedEnchantments.includes(Number(input.value));
   });
 
   // Checkboxes de Cidades
@@ -86,6 +95,14 @@ function setupEventListeners() {
     btn.classList.add('active');
     
     activePreferences.tierAtivo = Number(btn.dataset.tier);
+    updateStore();
+    loadAndRender();
+  });
+
+  // Filtro de encantamentos: sem seleção, exibe todos
+  elements.enchantmentFilter.addEventListener('change', () => {
+    activePreferences.encantamentosSelecionados = [...document.querySelectorAll('.enchantment-filter-input:checked')]
+      .map(input => Number(input.value));
     updateStore();
     loadAndRender();
   });
@@ -146,21 +163,30 @@ function buildItemIds() {
   const tier = activePreferences.tierAtivo;
   const config = RESOURCE_TYPES[resource];
   const ids = [];
+  const selectedEnchantments = Array.isArray(activePreferences.encantamentosSelecionados)
+    ? activePreferences.encantamentosSelecionados
+    : [];
+  const enchantments = selectedEnchantments.length > 0
+    ? selectedEnchantments
+    : [0, 1, 2, 3, 4];
+  const validEnchantments = enchantments.filter(enc => VALORES_ITENS[tier]?.[enc] > 0);
 
   const brutoBase = config.bruto_prefix.replace('{tier}', tier);
-  for (let i = 0; i <= 4; i++) ids.push(buildEncantadoId(brutoBase, i));
+  validEnchantments.forEach(enc => ids.push(buildEncantadoId(brutoBase, enc)));
 
   if (tier > 2) {
     const tierAnterior = tier - 1;
     const prevBase = config.refinado_prefix.replace('{tier}', tierAnterior);
-    const maxEncPrevio = (tierAnterior >= 4) ? 4 : 0;
-    for (let i = 0; i <= maxEncPrevio; i++) ids.push(buildEncantadoId(prevBase, i));
+    const prevEnchantments = tierAnterior >= 4
+      ? validEnchantments
+      : (validEnchantments.length > 0 ? [0] : []);
+    prevEnchantments.forEach(enc => ids.push(buildEncantadoId(prevBase, enc)));
   }
 
   const refinadoBase = config.refinado_prefix.replace('{tier}', tier);
-  for (let i = 0; i <= 4; i++) ids.push(buildEncantadoId(refinadoBase, i));
+  validEnchantments.forEach(enc => ids.push(buildEncantadoId(refinadoBase, enc)));
 
-  return ids;
+  return [...new Set(ids)];
 }
 
 // Busca os preços na API e renderiza a tabela
@@ -172,7 +198,7 @@ async function loadAndRender() {
   renderSkeletons();
 
   if (cidades.length === 0) {
-    elements.tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 20px;">Nenhuma cidade selecionada como ativa.</td></tr>`;
+    elements.tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 20px;">Nenhuma cidade selecionada como ativa.</td></tr>`;
     elements.decisionText.innerText = "Por favor, selecione ao menos uma cidade nas configurações.";
     return;
   }
@@ -181,7 +207,7 @@ async function loadAndRender() {
     apiDataCache = await fetchPrices(itemIds, cidades);
     renderCalculations();
   } catch (error) {
-    elements.tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--color-loss); padding: 20px;">Erro ao carregar dados da API. Você pode digitar os preços manualmente.</td></tr>`;
+    elements.tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--color-loss); padding: 20px;">Erro ao carregar dados da API. Você pode digitar os preços manualmente.</td></tr>`;
     elements.decisionText.innerText = "API do AODP indisponível. Preencha os valores desejados manualmente.";
     
     // Tenta montar linhas vazias para permitir edição manual sem quebrar
@@ -207,6 +233,7 @@ function renderSkeletons() {
       <td><div class="loading-skeleton" style="width: 50px;"></div></td>
       <td><div class="loading-skeleton" style="width: 50px;"></div></td>
       <td><div class="loading-skeleton" style="width: 60px;"></div></td>
+      <td><div class="loading-skeleton" style="width: 60px;"></div></td>
     `;
     elements.tableBody.appendChild(tr);
   }
@@ -230,6 +257,12 @@ function getApiRecord(itemId, city) {
   return apiDataCache.find(r => r.item_id === itemId && r.city === city);
 }
 
+function getPriceAgeClass(ageText) {
+  if (ageText.endsWith('m')) return 'age-fresh';
+  if (ageText.endsWith('h')) return 'age-stale';
+  return 'age-old';
+}
+
 // Renderiza os cálculos e popula a tabela com dados reais e editáveis
 function renderCalculations() {
   const resource = activePreferences.recursoAtivo;
@@ -239,6 +272,9 @@ function renderCalculations() {
   
   const formula = RECEITAS_REFINO[tier];
   const itemValues = VALORES_ITENS[tier];
+  const selectedEnchantments = Array.isArray(activePreferences.encantamentosSelecionados)
+    ? activePreferences.encantamentosSelecionados
+    : [];
   
   const taxaMercado = activePreferences.premium ? 0.065 : 0.105;
   const taxaEstacao = activePreferences.taxasEstacao[resource] ?? 500;
@@ -287,6 +323,7 @@ function renderCalculations() {
     
     // Ignora se for encantamento inexistente (T2 e T3 só têm .0)
     if (valorItemRefinado === 0) continue;
+    if (selectedEnchantments.length > 0 && !selectedEnchantments.includes(enc)) continue;
 
     cidades.forEach(cidade => {
       // 1. Coleta preços das fontes de entrada
@@ -295,6 +332,7 @@ function renderCalculations() {
       const precoVenda = getActivePrice(refinadoId, cidade, 0, "sell_price_min");
       
       const recordBruto = getApiRecord(brutoId, cidade);
+      const recordPrevio = refinadoAnteriorId ? getApiRecord(refinadoAnteriorId, cidade) : null;
       const recordVenda = getApiRecord(refinadoId, cidade);
 
       // 2. Calcula as frações de RRR e custos efetivos
@@ -313,6 +351,7 @@ function renderCalculations() {
       );
       
       const custoEfetivoTotal = custoBrutoEfetivo + custoPrevioEfetivo;
+      const custoUnitario = custoEfetivoTotal + calcNutritionCost(valorItemRefinado, taxaEstacao);
       const margemPercentual = custoEfetivoTotal > 0 ? (lucro / custoEfetivoTotal) * 100 : 0;
 
       // Armazena dados da rota para posterior avaliação no card de decisão
@@ -336,11 +375,9 @@ function renderCalculations() {
       const nomeItem = `${resource} T${tier}.${enc}`;
       const cdnUrl = `https://render.albiononline.com/v1/item/${refinadoId}.png?size=40`;
       
-      // Badge da idade do preço do refinado
-      const ageText = recordVenda ? formatPriceAge(recordVenda.sell_price_min_date) : "Sem dados";
-      let ageClass = "age-old";
-      if (ageText.endsWith('m')) ageClass = "age-fresh";
-      else if (ageText.endsWith('h')) ageClass = "age-stale";
+      const ageTextBruto = recordBruto ? formatPriceAge(recordBruto.sell_price_min_date) : "Sem dados";
+      const ageTextPrevio = recordPrevio ? formatPriceAge(recordPrevio.sell_price_min_date) : "Sem dados";
+      const ageTextVenda = recordVenda ? formatPriceAge(recordVenda.sell_price_min_date) : "Sem dados";
 
       tr.innerHTML = `
         <td>
@@ -356,6 +393,7 @@ function renderCalculations() {
           <input type="text" inputmode="numeric" class="price-input bruto-input" 
                  data-item="${brutoId}" data-city="${cidade}" 
                  value="${precoBruto > 0 ? precoBruto : ''}" placeholder="0">
+             <span class="price-age ${getPriceAgeClass(ageTextBruto)}">${ageTextBruto}</span>
         </td>
 
         <!-- Célula de entrada refinada anterior (vazia se T2) -->
@@ -364,6 +402,7 @@ function renderCalculations() {
             <input type="text" inputmode="numeric" class="price-input prev-input" 
                    data-item="${refinadoAnteriorId}" data-city="${cidade}" 
                    value="${precoPrevio > 0 ? precoPrevio : ''}" placeholder="0">
+                 <span class="price-age ${getPriceAgeClass(ageTextPrevio)}">${ageTextPrevio}</span>
           ` : '<span style="color:#555;">-</span>'}
         </td>
 
@@ -372,7 +411,12 @@ function renderCalculations() {
           <input type="text" inputmode="numeric" class="price-input venda-input" 
                  data-item="${refinadoId}" data-city="${cidade}" 
                  value="${precoVenda > 0 ? precoVenda : ''}" placeholder="0">
-          <span class="price-age ${ageClass}">${ageText}</span>
+             <span class="price-age ${getPriceAgeClass(ageTextVenda)}">${ageTextVenda}</span>
+        </td>
+
+        <!-- Custo total para produzir uma unidade refinada -->
+        <td class="value-cell">
+          ${Math.round(custoUnitario).toLocaleString('pt-BR')}
         </td>
 
         <!-- Célula de Lucro Líquido formatada em verde ou vermelho -->
