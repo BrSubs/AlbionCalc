@@ -30,9 +30,9 @@ export const VALORES_ITENS = {
 
 // 3. Mapeamento de Recursos com bônus de refino por cidade
 export const BONUS_REFINO_CIDADES = {
-  "Bridgewatch": "FIBER",       // Tecido / Fibra
-  "Lymhurst": "WOOD",           // Tábua / Tronco
-  "Fort Sterling": "STONE",     // Bloco / Pedra
+  "Bridgewatch": "STONE",     // Bloco / Pedra
+  "Lymhurst": "FIBER",       // Tecido / Fibra
+  "Fort Sterling": "WOOD",           // Tábua / Tronco
   "Thetford": "ORE",            // Barra / Minério
   "Martlock": "HIDE",           // Couro / Pelego
   "Caerleon": "NONE",            // Sem bônus de refino
@@ -75,7 +75,7 @@ export const RESOURCE_TYPES = {
   },
   STONE: {
     name: "Pedra / Bloco de Pedra",
-    bruto_prefix: "T{tier}_STONE",
+    bruto_prefix: "T{tier}_ROCK",
     refinado_prefix: "T{tier}_STONEBLOCK"
   }
 };
