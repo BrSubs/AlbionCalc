@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="app-container">
-    
+
     <!-- 1. Cabeçalho Principal (Navegação SPA Nível 1) -->
     <header class="app-header">
       <div class="main-tabs">
@@ -26,89 +26,101 @@
       <button class="res-btn" data-res="STONE">Pedra</button>
     </nav>
 
-    <!-- 3. Painel de Configurações (Acordeão Colapsável) -->
-    <section class="config-section">
-      <details class="config-details">
-        <summary class="config-summary">⚙️ Configurações e Filtros</summary>
-        <div class="config-grid">
+    <!-- Layout principal: coluna de config (esquerda no desktop) + coluna de conteúdo (direita) -->
+    <div class="main-layout">
 
-          <!-- Seletor de Tiers (Abas Rápidas) -->
-          <div class="tier-selector" id="tier-selector">
-            <button class="tier-btn" data-tier="2">T2</button>
-            <button class="tier-btn active" data-tier="3">T3</button>
-            <button class="tier-btn" data-tier="4">T4</button>
-            <button class="tier-btn" data-tier="5">T5</button>
-            <button class="tier-btn" data-tier="6">T6</button>
-            <button class="tier-btn" data-tier="7">T7</button>
-            <button class="tier-btn" data-tier="8">T8</button>
-          </div>
+      <!-- 3. Painel de Configurações (Acordeão Colapsável) -->
+      <section class="config-section">
+        <details class="config-details">
+          <summary class="config-summary">⚙️ Configurações e Filtros</summary>
+          <div class="config-grid">
 
-          <!-- Premium & Foco Switches -->
-          <div class="toggle-group">
-            <label class="switch-label">
-              <input type="checkbox" id="chk-premium" checked>
-              <span class="switch-custom"></span>
-              Premium Ativo
-            </label>
-            <label class="switch-label">
-              <input type="checkbox" id="chk-focus">
-              <span class="switch-custom"></span>
-              Usar Foco <span class="focus-gold">(RRR+)</span>
-            </label>
-          </div>
-
-          <!-- Taxa de Nutrição da Estação -->
-          <div class="input-group">
-            <label for="txt-taxa-estacao">Taxa da Refinaria (por 100 Nutrição):</label>
-            <input type="number" id="txt-taxa-estacao" value="1" min="0" step="10">
-          </div>
-
-          <!-- Filtro de Cidades -->
-          <div class="cities-group">
-            <span class="section-title">Cidades Analisadas:</span>
-            <div class="cities-grid">
-              <label class="city-check"><input type="checkbox" class="city-filter" value="Brecilien" checked> Brecilien</label>
-              <label class="city-check"><input type="checkbox" class="city-filter" value="Bridgewatch" checked> Bridgewatch</label>
-              <label class="city-check"><input type="checkbox" class="city-filter" value="Caerleon" checked> Caerleon</label>
-              <label class="city-check"><input type="checkbox" class="city-filter" value="Fort Sterling" checked> Fort Sterling</label>
-              <label class="city-check"><input type="checkbox" class="city-filter" value="Lymhurst" checked> Lymhurst</label>
-              <label class="city-check"><input type="checkbox" class="city-filter" value="Martlock" checked> Martlock</label>
-              <label class="city-check"><input type="checkbox" class="city-filter" value="Thetford" checked> Thetford</label>
+            <!-- Seletor de Tiers (Abas Rápidas) -->
+            <div class="tier-selector" id="tier-selector">
+              <button class="tier-btn" data-tier="2">T2</button>
+              <button class="tier-btn active" data-tier="3">T3</button>
+              <button class="tier-btn" data-tier="4">T4</button>
+              <button class="tier-btn" data-tier="5">T5</button>
+              <button class="tier-btn" data-tier="6">T6</button>
+              <button class="tier-btn" data-tier="7">T7</button>
+              <button class="tier-btn" data-tier="8">T8</button>
             </div>
+
+            <!-- Premium & Foco Switches -->
+            <div class="toggle-group">
+              <label class="switch-label">
+                <input type="checkbox" id="chk-premium" checked>
+                <span class="switch-custom"></span>
+                Premium Ativo
+              </label>
+              <label class="switch-label">
+                <input type="checkbox" id="chk-focus">
+                <span class="switch-custom"></span>
+                Usar Foco <span class="focus-gold">(RRR+)</span>
+              </label>
+            </div>
+
+            <!-- Taxa de Nutrição da Estação -->
+            <div class="input-group">
+              <label for="txt-taxa-estacao">Taxa da Refinaria (por 100 Nutrição):</label>
+              <input type="number" id="txt-taxa-estacao" value="1" min="0" step="10">
+            </div>
+
+            <!-- Filtro de Cidades -->
+            <div class="cities-group">
+              <span class="section-title">Cidades Analisadas:</span>
+              <div class="cities-grid">
+                <label class="city-check"><input type="checkbox" class="city-filter" value="Brecilien" checked> Brecilien</label>
+                <label class="city-check"><input type="checkbox" class="city-filter" value="Bridgewatch" checked> Bridgewatch</label>
+                <label class="city-check"><input type="checkbox" class="city-filter" value="Caerleon" checked> Caerleon</label>
+                <label class="city-check"><input type="checkbox" class="city-filter" value="Fort Sterling" checked> Fort Sterling</label>
+                <label class="city-check"><input type="checkbox" class="city-filter" value="Lymhurst" checked> Lymhurst</label>
+                <label class="city-check"><input type="checkbox" class="city-filter" value="Martlock" checked> Martlock</label>
+                <label class="city-check"><input type="checkbox" class="city-filter" value="Thetford" checked> Thetford</label>
+              </div>
+            </div>
+
           </div>
-          
-        </div>
-      </details>
-    </section>
+        </details>
+      </section>
 
-    <!-- 5. Painel de Tomada de Decisão (Melhor Rota) -->
-    <section class="decision-card" id="decision-card">
-      <div class="decision-content">
-        <span class="decision-title">💡 Melhor Rota Encontrada</span>
-        <p class="decision-text" id="decision-text">Carregando dados de preços...</p>
-      </div>
-    </section>
+      <!-- Coluna de conteúdo: decisão + tabela -->
+      <div class="content-column">
 
-    <!-- 6. Área Principal de Dados (Tabela de Refino) -->
-    <main class="main-content">
-      <div class="table-container">
-        <table class="refine-table" id="refine-table">
-          <thead>
-            <tr>
-              <th>Recurso Refinado</th>
-              <th>Cidade</th>
-              <th>Insumo Bruto</th>
-              <th>Insumo Refinado</th>
-              <th>Preço Venda</th>
-              <th>Lucro Unitário</th>
-            </tr>
-          </thead>
-          <tbody id="table-body">
-            <!-- As linhas da tabela (.0 a .4) serão inseridas dinamicamente pelo app.js -->
-          </tbody>
-        </table>
+        <!-- 5. Painel de Tomada de Decisão (Melhor Rota) -->
+        <section class="decision-card" id="decision-card">
+          <div class="decision-content">
+            <span class="decision-title">💡 Melhor Rota Encontrada</span>
+            <p class="decision-text" id="decision-text">Carregando dados de preços...</p>
+          </div>
+        </section>
+
+        <!-- 6. Área Principal de Dados (Tabela de Refino) -->
+        <main class="main-content">
+          <div class="table-container">
+            <table class="refine-table" id="refine-table">
+              <thead>
+                <tr>
+                  <th>Recurso Refinado</th>
+                  <th>Cidade</th>
+                  <th>Insumo Bruto</th>
+                  <th>Insumo Refinado</th>
+                  <th>Preço Venda</th>
+                  <th>Lucro Unitário</th>
+                </tr>
+              </thead>
+              <tbody id="table-body">
+                <!-- As linhas da tabela (.0 a .4) serão inseridas dinamicamente pelo app.js -->
+              </tbody>
+            </table>
+          </div>
+        </main>
+
       </div>
-    </main>
+      <!-- /content-column -->
+
+    </div>
+    <!-- /main-layout -->
 
     <!-- 7. Rodapé / Botão de Reset de Preços -->
     <footer class="app-footer">

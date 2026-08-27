@@ -135,35 +135,30 @@ function updateStore() {
   savePreferences(activePreferences);
 }
 
+// app.js
+function buildEncantadoId(baseId, enc) {
+  return enc === 0 ? baseId : `${baseId}_LEVEL${enc}@${enc}`;
+}
+
 // Retorna a lista de IDs de itens para consultar a API
 function buildItemIds() {
   const resource = activePreferences.recursoAtivo;
   const tier = activePreferences.tierAtivo;
   const config = RESOURCE_TYPES[resource];
-  
   const ids = [];
-  
-  // Encantamentos do Insumo Bruto (.0 a .4)
-  ids.push(config.bruto_prefix.replace('{tier}', tier)); // .0
-  for (let i = 1; i <= 4; i++) {
-    ids.push(`${config.bruto_prefix.replace('{tier}', tier)}_LEVEL${i}`); // .1 a .4
-  }
 
-  // Refinado do Tier anterior (.0 sempre)
+  const brutoBase = config.bruto_prefix.replace('{tier}', tier);
+  for (let i = 0; i <= 4; i++) ids.push(buildEncantadoId(brutoBase, i));
+
   if (tier > 2) {
     const tierAnterior = tier - 1;
-    const maxEncPrevio = (tierAnterior >= 4) ? 4 : 0; // T2/T3 só têm .0
-    ids.push(config.refinado_prefix.replace('{tier}', tierAnterior)); // .0 sempre existe
-    for (let i = 1; i <= maxEncPrevio; i++) {
-      ids.push(`${config.refinado_prefix.replace('{tier}', tierAnterior)}_LEVEL${i}`);
-    }
+    const prevBase = config.refinado_prefix.replace('{tier}', tierAnterior);
+    const maxEncPrevio = (tierAnterior >= 4) ? 4 : 0;
+    for (let i = 0; i <= maxEncPrevio; i++) ids.push(buildEncantadoId(prevBase, i));
   }
 
-  // Encantamentos do Refinado Final (.0 a .4)
-  ids.push(config.refinado_prefix.replace('{tier}', tier)); // .0
-  for (let i = 1; i <= 4; i++) {
-    ids.push(`${config.refinado_prefix.replace('{tier}', tier)}_LEVEL${i}`); // .1 a .4
-  }
+  const refinadoBase = config.refinado_prefix.replace('{tier}', tier);
+  for (let i = 0; i <= 4; i++) ids.push(buildEncantadoId(refinadoBase, i));
 
   return ids;
 }
@@ -271,9 +266,22 @@ function renderCalculations() {
   // Looping pelos 5 encantamentos (.0 a .4)
   for (let enc = 0; enc < 5; enc++) {
     const suffix = enc === 0 ? "" : `_LEVEL${enc}`;
-    const brutoId = `${config.bruto_prefix.replace('{tier}', tier)}${suffix}`;
-    const refinadoId = `${config.refinado_prefix.replace('{tier}', tier)}${suffix}`;
-    const refinadoAnteriorId = tier > 2 ? config.refinado_prefix.replace('{tier}', tier - 1) : null;
+    // DEPOIS (correto)
+    const brutoBase = config.bruto_prefix.replace('{tier}', tier);
+    const refinadoBase = config.refinado_prefix.replace('{tier}', tier);
+    const brutoId = buildEncantadoId(brutoBase, enc);
+    const refinadoId = buildEncantadoId(refinadoBase, enc);
+
+    let refinadoAnteriorId = null;
+    if (tier > 2) {
+      const tierAnterior = tier - 1;
+      const tierAnteriorSuportaEncante = tierAnterior >= 4; // T2/T3 só têm .0
+      const encAnterior = tierAnteriorSuportaEncante ? enc : 0;
+      refinadoAnteriorId = buildEncantadoId(
+        config.refinado_prefix.replace('{tier}', tierAnterior),
+        encAnterior
+      );
+    }
     
     const valorItemRefinado = itemValues[enc];
     
@@ -531,3 +539,4 @@ function renderBestRoute(rotas) {
     elements.decisionText.innerText = "Nenhuma rota de transporte lucrativa foi encontrada no momento com os preços ativos.";
   }
 }
+

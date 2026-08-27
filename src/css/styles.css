@@ -491,11 +491,8 @@ body {
     padding: 16px;
   }
 
-  /* Grid layout no Desktop */
-  .app-header, .resource-nav, .tier-selector {
-    grid-column: span 2;
-  }
-
+  /* Grid layout no Desktop: coluna de config fixa à esquerda,
+     coluna de conteúdo (decisão + tabela) ampla à direita. */
   .main-layout {
     display: grid;
     grid-template-columns: 320px 1fr;
@@ -504,10 +501,17 @@ body {
   }
 
   .config-section {
-    grid-column: 1;
+    margin-bottom: 0; /* o gap do grid já cuida do espaçamento */
   }
 
-  .main-content, .decision-card {
-    grid-column: 2;
+  .content-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .decision-card,
+  .main-content {
+    margin-bottom: 0; /* espaçamento agora vem do gap do .content-column */
   }
 }
