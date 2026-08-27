@@ -83,16 +83,6 @@ Depois, abra o endereço fornecido pelo servidor, normalmente:
 http://localhost:5500
 ```
 
-## Testes
-
-Os testes do motor de cálculo usam o Node.js:
-
-```bash
-npm test
-```
-
-O projeto também possui uma suíte offline em PowerShell para validar as regras principais sem depender da API.
-
 ## Tecnologias
 
 - HTML5
@@ -100,7 +90,6 @@ O projeto também possui uma suíte offline em PowerShell para validar as regras
 - JavaScript moderno com ES Modules
 - API pública do AODP
 - `localStorage` para preferências e ajustes de preços
-- Node.js para testes automatizados
 
 ## Estrutura
 
@@ -112,17 +101,8 @@ src/js/api.js           Integração com a AODP
 src/js/database.js      Receitas, valores e bônus regionais
 src/js/engine.js        Fórmulas puras de cálculo
 src/js/store.js         Preferências e preços personalizados
-tests/                  Testes do motor de cálculo
-docs/                   Regras, arquitetura, API e UX
 ```
 
 ## Estado do projeto
 
 O módulo de **Refino** está disponível e utiliza dados reais de mercado. O módulo de **Crafting** aparece na interface como uma funcionalidade planejada para uma próxima etapa.
-
-## Documentação
-
-- [Regras de negócio](docs/business-rules.md)
-- [Arquitetura](docs/architecture.md)
-- [Contrato da API](docs/api-contract.md)
-- [Diretrizes de UI/UX](docs/ui-ux.md)
