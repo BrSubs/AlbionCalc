@@ -17,11 +17,11 @@ const DEFAULT_PREFERENCES = {
   usarFoco: false,
   cidadesSelecionadas: ["Bridgewatch", "Martlock", "Lymhurst", "Fort Sterling", "Thetford"],
   taxasEstacao: {
-    ORE: 1,
-    WOOD: 1,
-    HIDE: 1,
-    FIBER: 1,
-    STONE: 1
+    ORE: 500,
+    WOOD: 500,
+    HIDE: 500,
+    FIBER: 500,
+    STONE: 500
   },
   recursoAtivo: "ORE", // ORE, WOOD, HIDE, FIBER, STONE
   tierAtivo: 3 // T2 a T8
