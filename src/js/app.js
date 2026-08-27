@@ -41,7 +41,7 @@ function applyPreferencesToUI() {
   elements.chkFocus.checked = activePreferences.usarFoco;
   
   const currentResource = activePreferences.recursoAtivo;
-  elements.txtTaxaEstacao.value = activePreferences.taxasEstacao[currentResource] || 500;
+  elements.txtTaxaEstacao.value = activePreferences.taxasEstacao[currentResource] ?? 500;
 
   // Botões de Recurso
   document.querySelectorAll('.res-btn').forEach(btn => {
@@ -71,7 +71,7 @@ function setupEventListeners() {
     
     activePreferences.recursoAtivo = btn.dataset.res;
     // Carrega taxa correspondente salva para este recurso
-    elements.txtTaxaEstacao.value = activePreferences.taxasEstacao[activePreferences.recursoAtivo] || 500;
+    elements.txtTaxaEstacao.value = activePreferences.taxasEstacao[activePreferences.recursoAtivo] ?? 500;
     
     updateStore();
     loadAndRender();
@@ -151,7 +151,12 @@ function buildItemIds() {
 
   // Refinado do Tier anterior (.0 sempre)
   if (tier > 2) {
-    ids.push(config.refinado_prefix.replace('{tier}', tier - 1));
+    const tierAnterior = tier - 1;
+    const maxEncPrevio = (tierAnterior >= 4) ? 4 : 0; // T2/T3 só têm .0
+    ids.push(config.refinado_prefix.replace('{tier}', tierAnterior)); // .0 sempre existe
+    for (let i = 1; i <= maxEncPrevio; i++) {
+      ids.push(`${config.refinado_prefix.replace('{tier}', tierAnterior)}_LEVEL${i}`);
+    }
   }
 
   // Encantamentos do Refinado Final (.0 a .4)
@@ -241,7 +246,7 @@ function renderCalculations() {
   const itemValues = VALORES_ITENS[tier];
   
   const taxaMercado = activePreferences.premium ? 0.065 : 0.105;
-  const taxaEstacao = activePreferences.taxasEstacao[resource] || 500;
+  const taxaEstacao = activePreferences.taxasEstacao[resource] ?? 500;
 
   // ---- Guarda qual input estava focado ANTES de limpar a tabela ----
   // O innerHTML='' logo abaixo destrói o elemento focado; sem isso, o cursor
@@ -426,7 +431,7 @@ function renderBestRoute(rotas) {
   const itemValues = VALORES_ITENS[tier];
   const formula = RECEITAS_REFINO[tier]; // formula.bruto = qtd de material bruto por refino, formula.refinadoAnterior = qtd do refinado do tier anterior
 
-  const taxaEstacao = activePreferences.taxasEstacao[resource] || 500;
+  const taxaEstacao = activePreferences.taxasEstacao[resource] ?? 500;
   const taxaMercado = activePreferences.premium ? 0.065 : 0.105;
 
   const tiposUnicos = [...new Set(rotas.map(r => r.recurso))];
