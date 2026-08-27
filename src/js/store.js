@@ -15,7 +15,7 @@ const STORAGE_KEYS = {
 const DEFAULT_PREFERENCES = {
   premium: true,
   usarFoco: false,
-  cidadesSelecionadas: ["Caerleon","Brecilien", "Bridgewatch", "Martlock", "Lymhurst", "Fort Sterling", "Thetford"],
+  cidadesSelecionadas: ["Bridgewatch", "Martlock", "Lymhurst", "Fort Sterling", "Thetford"],
   taxasEstacao: {
     ORE: 1,
     WOOD: 1,
@@ -24,7 +24,7 @@ const DEFAULT_PREFERENCES = {
     STONE: 1
   },
   recursoAtivo: "ORE", // ORE, WOOD, HIDE, FIBER, STONE
-  tierAtivo: 4 // T2 a T8
+  tierAtivo: 3 // T2 a T8
 };
 
 /**

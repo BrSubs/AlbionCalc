@@ -26,23 +26,23 @@
       <button class="res-btn" data-res="STONE">Pedra</button>
     </nav>
 
-    <!-- 3. Seletor de Tiers (Abas Rápidas) -->
-    <div class="tier-selector" id="tier-selector">
-      <button class="tier-btn" data-tier="2">T2</button>
-      <button class="tier-btn" data-tier="3">T3</button>
-      <button class="tier-btn active" data-tier="4">T4</button>
-      <button class="tier-btn" data-tier="5">T5</button>
-      <button class="tier-btn" data-tier="6">T6</button>
-      <button class="tier-btn" data-tier="7">T7</button>
-      <button class="tier-btn" data-tier="8">T8</button>
-    </div>
-
-    <!-- 4. Painel de Configurações (Acordeão Colapsável) -->
+    <!-- 3. Painel de Configurações (Acordeão Colapsável) -->
     <section class="config-section">
-      <details class="config-details" open>
+      <details class="config-details" close>
         <summary class="config-summary">⚙️ Configurações e Filtros</summary>
         <div class="config-grid">
-          
+
+          <!-- Seletor de Tiers (Abas Rápidas) -->
+          <div class="tier-selector" id="tier-selector">
+            <button class="tier-btn" data-tier="2">T2</button>
+            <button class="tier-btn" data-tier="3">T3</button>
+            <button class="tier-btn active" data-tier="4">T4</button>
+            <button class="tier-btn" data-tier="5">T5</button>
+            <button class="tier-btn" data-tier="6">T6</button>
+            <button class="tier-btn" data-tier="7">T7</button>
+            <button class="tier-btn" data-tier="8">T8</button>
+          </div>
+
           <!-- Premium & Foco Switches -->
           <div class="toggle-group">
             <label class="switch-label">
@@ -74,8 +74,6 @@
               <label class="city-check"><input type="checkbox" class="city-filter" value="Lymhurst" checked> Lymhurst</label>
               <label class="city-check"><input type="checkbox" class="city-filter" value="Martlock" checked> Martlock</label>
               <label class="city-check"><input type="checkbox" class="city-filter" value="Thetford" checked> Thetford</label>
-
-
             </div>
           </div>
           

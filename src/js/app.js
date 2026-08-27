@@ -242,6 +242,21 @@ function renderCalculations() {
   
   const taxaMercado = activePreferences.premium ? 0.065 : 0.105;
   const taxaEstacao = activePreferences.taxasEstacao[resource] || 500;
+
+  // ---- Guarda qual input estava focado ANTES de limpar a tabela ----
+  // O innerHTML='' logo abaixo destrói o elemento focado; sem isso, o cursor
+  // "pula" e a digitação parece travar a cada tecla.
+  const activeEl = document.activeElement;
+  let focoAnterior = null;
+  if (activeEl && activeEl.classList && activeEl.classList.contains('price-input') && elements.tableBody.contains(activeEl)) {
+    focoAnterior = {
+      item: activeEl.dataset.item,
+      city: activeEl.dataset.city,
+      classe: [...activeEl.classList].find(c => c.endsWith('-input')), // bruto-input / prev-input / venda-input
+      selectionStart: activeEl.selectionStart,
+      selectionEnd: activeEl.selectionEnd
+    };
+  }
   
   elements.tableBody.innerHTML = '';
   
@@ -325,7 +340,7 @@ function renderCalculations() {
         
         <!-- Célula de entrada bruta editável -->
         <td class="price-cell">
-          <input type="number" class="price-input bruto-input" 
+          <input type="text" inputmode="numeric" class="price-input bruto-input" 
                  data-item="${brutoId}" data-city="${cidade}" 
                  value="${precoBruto > 0 ? precoBruto : ''}" placeholder="0">
         </td>
@@ -333,7 +348,7 @@ function renderCalculations() {
         <!-- Célula de entrada refinada anterior (vazia se T2) -->
         <td class="price-cell">
           ${refinadoAnteriorId ? `
-            <input type="number" class="price-input prev-input" 
+            <input type="text" inputmode="numeric" class="price-input prev-input" 
                    data-item="${refinadoAnteriorId}" data-city="${cidade}" 
                    value="${precoPrevio > 0 ? precoPrevio : ''}" placeholder="0">
           ` : '<span style="color:#555;">-</span>'}
@@ -341,7 +356,7 @@ function renderCalculations() {
 
         <!-- Célula de venda editável com badge de idade do preço -->
         <td class="price-cell">
-          <input type="number" class="price-input venda-input" 
+          <input type="text" inputmode="numeric" class="price-input venda-input" 
                  data-item="${refinadoId}" data-city="${cidade}" 
                  value="${precoVenda > 0 ? precoVenda : ''}" placeholder="0">
           <span class="price-age ${ageClass}">${ageText}</span>
@@ -363,6 +378,23 @@ function renderCalculations() {
 
   // 6. Atualiza o card da melhor rota
   renderBestRoute(rotasCalculadas);
+
+  // ---- Restaura o foco e a posição do cursor no input equivalente ----
+  // Precisa vir DEPOIS de setupTableInputs(), já que é ali que os novos
+  // inputs recebem seus listeners.
+  if (focoAnterior) {
+    const seletor = `.${focoAnterior.classe}[data-item="${CSS.escape(focoAnterior.item)}"][data-city="${CSS.escape(focoAnterior.city)}"]`;
+    const novoInput = elements.tableBody.querySelector(seletor);
+    if (novoInput) {
+      novoInput.focus();
+      try {
+        novoInput.setSelectionRange(focoAnterior.selectionStart, focoAnterior.selectionEnd);
+      } catch (err) {
+        // type="number" em alguns navegadores (ex: Firefox) não suporta
+        // setSelectionRange — ignora silenciosamente, o foco já foi restaurado
+      }
+    }
+  }
 }
 
 // Captura as alterações manuais feitas diretamente na tabela de forma em tempo real
