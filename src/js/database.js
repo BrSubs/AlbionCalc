@@ -86,14 +86,58 @@ export function formatIntegerValue(value) {
   return Math.round(numericValue).toLocaleString('pt-BR');
 }
 
-export function getCostColumnLabels(resource) {
+export function getResourceLabels(resource) {
   const labelsByResource = {
-    ORE: { bruto: 'Custo do Minério', refinado: 'Custo da Barra' },
-    WOOD: { bruto: 'Custo do Tronco', refinado: 'Custo da Tábua' },
-    HIDE: { bruto: 'Custo do Pelego', refinado: 'Custo do Couro' },
-    FIBER: { bruto: 'Custo da Fibra', refinado: 'Custo do Tecido' },
-    STONE: { bruto: 'Custo da Pedra', refinado: 'Custo do Bloco' }
+    ORE: {
+      bruto: 'Minério',
+      refinado: 'Barra de Ferro',
+      brutoPlural: 'minério',
+      refinadoPlural: 'barra de ferro',
+      anterior: 'barra de ferro'
+    },
+    WOOD: {
+      bruto: 'Tronco',
+      refinado: 'Tábua',
+      brutoPlural: 'tronco',
+      refinadoPlural: 'tábua',
+      anterior: 'tábua'
+    },
+    HIDE: {
+      bruto: 'Pelego',
+      refinado: 'Couro',
+      brutoPlural: 'pelego',
+      refinadoPlural: 'couro',
+      anterior: 'couro'
+    },
+    FIBER: {
+      bruto: 'Fibra',
+      refinado: 'Tecido',
+      brutoPlural: 'fibra',
+      refinadoPlural: 'tecido',
+      anterior: 'tecido'
+    },
+    STONE: {
+      bruto: 'Pedra',
+      refinado: 'Bloco',
+      brutoPlural: 'pedra',
+      refinadoPlural: 'bloco',
+      anterior: 'bloco'
+    }
   };
 
-  return labelsByResource[resource] ?? { bruto: 'Custo do Insumo', refinado: 'Custo do Produto' };
+  return labelsByResource[resource] ?? {
+    bruto: 'Insumo',
+    refinado: 'Produto',
+    brutoPlural: 'insumo',
+    refinadoPlural: 'produto',
+    anterior: 'produto'
+  };
+}
+
+export function getCostColumnLabels(resource) {
+  const labels = getResourceLabels(resource);
+  return {
+    bruto: `Custo do ${labels.bruto}`,
+    refinado: `Custo da ${labels.refinado}`
+  };
 }

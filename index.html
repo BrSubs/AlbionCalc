@@ -13,7 +13,7 @@
     <header class="app-header">
       <div class="main-tabs">
         <button class="tab-btn active" id="tab-refine">Refino</button>
-        <button class="tab-btn disabled" id="tab-craft" disabled>Crafting <small>(Breve)</small></button>
+        <button class="tab-btn disabled" id="tab-craft" disabled>Crafting <small>(Em Breve)</small></button>
       </div>
     </header>
 
@@ -62,7 +62,7 @@
               </div>
             </div>
 
-            <!-- Premium & Foco Switches -->
+            <!-- Premium, Foco e Critério da Melhor Rota -->
             <div class="toggle-group">
               <label class="switch-label">
                 <input type="checkbox" id="chk-premium" checked>
@@ -70,9 +70,17 @@
                 Premium Ativo
               </label>
               <label class="switch-label">
-                <input type="checkbox" id="chk-focus">
+                <div class="switch-label-with-help">
+                  <input type="checkbox" id="chk-focus">
+                  <span class="switch-custom"></span>
+                  <span>Usar Foco</span>
+                </div>
+                <button type="button" class="help-button small-help-button" id="help-focus-toggle" aria-label="Explicar uso de foco">?</button>
+              </label>
+              <label class="switch-label">
+                <input type="checkbox" id="chk-priorizar-lucro">
                 <span class="switch-custom"></span>
-                Usar Foco
+                Priorizar Lucro Líquido
               </label>
             </div>
 
@@ -125,8 +133,18 @@
                   <th id="header-custo-bruto">Custo do Insumo</th>
                   <th id="header-custo-refinado">Custo do Produto</th>
                   <th>Preço de Venda</th>
-                  <th>Custo Unitário</th>
-                  <th>Lucro Unitário</th>
+                  <th>
+                    <div class="header-with-help">
+                      <span>Custo Unitário</span>
+                      <button type="button" class="help-button" id="help-cost-unitario" aria-label="Explicar custo unitário">?</button>
+                    </div>
+                  </th>
+                  <th>
+                    <div class="header-with-help">
+                      <span>Lucro Unitário</span>
+                      <button type="button" class="help-button" id="help-profit-unitario" aria-label="Explicar lucro unitário">?</button>
+                    </div>
+                  </th>
                 </tr>
               </thead>
               <tbody id="table-body">
@@ -147,6 +165,69 @@
       <div class="footer-info">Dados obtidos via AODP.</div>
     </footer>
 
+  </div>
+
+  <div class="help-modal-overlay hidden" id="cost-help-modal" aria-hidden="true">
+    <div class="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+      <div class="help-modal-header">
+        <h3 id="help-modal-title">Custo Unitário</h3>
+        <button type="button" class="help-modal-close" id="help-modal-close" aria-label="Fechar ajuda">×</button>
+      </div>
+      <div class="help-modal-body">
+        <p id="help-modal-description"></p>
+        <div class="formula-box">
+          <div class="formula-label">Fórmula</div>
+          <div id="help-modal-formula" class="formula-text"></div>
+        </div>
+        <div class="example-box">
+          <div class="formula-label">Exemplo prático</div>
+          <div id="help-modal-example" class="example-text"></div>
+        </div>
+        <ul id="help-modal-steps" class="help-modal-steps"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="help-modal-overlay hidden" id="profit-help-modal" aria-hidden="true">
+    <div class="help-modal" role="dialog" aria-modal="true" aria-labelledby="profit-help-modal-title">
+      <div class="help-modal-header">
+        <h3 id="profit-help-modal-title">Lucro Unitário</h3>
+        <button type="button" class="help-modal-close" id="profit-help-modal-close" aria-label="Fechar ajuda do lucro">×</button>
+      </div>
+      <div class="help-modal-body">
+        <p id="profit-help-modal-description"></p>
+        <div class="formula-box">
+          <div class="formula-label">Fórmula</div>
+          <div id="profit-help-modal-formula" class="formula-text"></div>
+        </div>
+        <div class="example-box">
+          <div class="formula-label">Exemplo prático</div>
+          <div id="profit-help-modal-example" class="example-text"></div>
+        </div>
+        <ul id="profit-help-modal-steps" class="help-modal-steps"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="help-modal-overlay hidden" id="focus-help-modal" aria-hidden="true">
+    <div class="help-modal" role="dialog" aria-modal="true" aria-labelledby="focus-help-modal-title">
+      <div class="help-modal-header">
+        <h3 id="focus-help-modal-title">Uso de Foco</h3>
+        <button type="button" class="help-modal-close" id="focus-help-modal-close" aria-label="Fechar ajuda do foco">×</button>
+      </div>
+      <div class="help-modal-body">
+        <p id="focus-help-modal-description"></p>
+        <div class="formula-box">
+          <div class="formula-label">Como afeta o cálculo</div>
+          <div id="focus-help-modal-formula" class="formula-text"></div>
+        </div>
+        <div class="example-box">
+          <div class="formula-label">Efeito prático</div>
+          <div id="focus-help-modal-example" class="example-text"></div>
+        </div>
+        <ul id="focus-help-modal-steps" class="help-modal-steps"></ul>
+      </div>
+    </div>
   </div>
 
   <!-- Scripts -->

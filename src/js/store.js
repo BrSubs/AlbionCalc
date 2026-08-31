@@ -15,6 +15,7 @@ const STORAGE_KEYS = {
 const DEFAULT_PREFERENCES = {
   premium: true,
   usarFoco: false,
+  priorizarLucroLiquido: false,
   cidadesSelecionadas: ["Bridgewatch", "Martlock", "Lymhurst", "Fort Sterling", "Thetford"],
   taxasEstacao: {
     ORE: 500,
