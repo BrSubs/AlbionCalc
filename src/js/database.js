@@ -136,8 +136,19 @@ export function getResourceLabels(resource) {
 
 export function getCostColumnLabels(resource) {
   const labels = getResourceLabels(resource);
+  const artigos = {
+    ORE: { bruto: 'do', refinado: 'da' },
+    WOOD: { bruto: 'do', refinado: 'da' },
+    HIDE: { bruto: 'do', refinado: 'do' },
+    FIBER: { bruto: 'da', refinado: 'do' },
+    STONE: { bruto: 'da', refinado: 'do' }
+  };
+
+  const artigoBruto = artigos[resource]?.bruto ?? 'do';
+  const artigoRefinado = artigos[resource]?.refinado ?? 'do';
+
   return {
-    bruto: `Custo do ${labels.bruto}`,
-    refinado: `Custo da ${labels.refinado}`
+    bruto: `Custo ${artigoBruto} ${labels.bruto}`,
+    refinado: `Custo ${artigoRefinado} ${labels.refinado}`
   };
 }
