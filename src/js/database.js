@@ -79,3 +79,21 @@ export const RESOURCE_TYPES = {
     refinado_prefix: "T{tier}_STONEBLOCK"
   }
 };
+
+export function formatIntegerValue(value) {
+  const numericValue = Number(value ?? 0);
+  if (!Number.isFinite(numericValue)) return '0';
+  return Math.round(numericValue).toLocaleString('pt-BR');
+}
+
+export function getCostColumnLabels(resource) {
+  const labelsByResource = {
+    ORE: { bruto: 'Custo do Minério', refinado: 'Custo da Barra' },
+    WOOD: { bruto: 'Custo do Tronco', refinado: 'Custo da Tábua' },
+    HIDE: { bruto: 'Custo do Pelego', refinado: 'Custo do Couro' },
+    FIBER: { bruto: 'Custo da Fibra', refinado: 'Custo do Tecido' },
+    STONE: { bruto: 'Custo da Pedra', refinado: 'Custo do Bloco' }
+  };
+
+  return labelsByResource[resource] ?? { bruto: 'Custo do Insumo', refinado: 'Custo do Produto' };
+}

@@ -5,7 +5,7 @@
  * o motor de cálculo (engine.js), a camada de API (api.js) e o gerenciador de estado (store.js).
  */
 
-import { RESOURCE_TYPES, RECEITAS_REFINO, VALORES_ITENS } from './database.js';
+import { RESOURCE_TYPES, RECEITAS_REFINO, VALORES_ITENS, formatIntegerValue, getCostColumnLabels } from './database.js';
 import { determineRRR, applyRRR, calcNutritionCost, calcProfit } from './engine.js';
 import { fetchPrices, formatPriceAge } from './api.js';
 import { getPreferences, savePreferences, getPriceOverrides, setPriceOverride, clearPriceOverrides } from './store.js';
@@ -269,6 +269,12 @@ function renderCalculations() {
   const tier = activePreferences.tierAtivo;
   const config = RESOURCE_TYPES[resource];
   const cidades = activePreferences.cidadesSelecionadas;
+  const costLabels = getCostColumnLabels(resource);
+
+  const headerBruto = document.getElementById('header-custo-bruto');
+  const headerRefinado = document.getElementById('header-custo-refinado');
+  if (headerBruto) headerBruto.textContent = costLabels.bruto;
+  if (headerRefinado) headerRefinado.textContent = costLabels.refinado;
   
   const formula = RECEITAS_REFINO[tier];
   const itemValues = VALORES_ITENS[tier];
@@ -392,7 +398,7 @@ function renderCalculations() {
         <td class="price-cell">
           <input type="text" inputmode="numeric" class="price-input bruto-input" 
                  data-item="${brutoId}" data-city="${cidade}" 
-                 value="${precoBruto > 0 ? precoBruto : ''}" placeholder="0">
+                 value="${precoBruto > 0 ? formatIntegerValue(precoBruto) : ''}" placeholder="0">
              <span class="price-age ${getPriceAgeClass(ageTextBruto)}">${ageTextBruto}</span>
         </td>
 
@@ -401,7 +407,7 @@ function renderCalculations() {
           ${refinadoAnteriorId ? `
             <input type="text" inputmode="numeric" class="price-input prev-input" 
                    data-item="${refinadoAnteriorId}" data-city="${cidade}" 
-                   value="${precoPrevio > 0 ? precoPrevio : ''}" placeholder="0">
+                   value="${precoPrevio > 0 ? formatIntegerValue(precoPrevio) : ''}" placeholder="0">
                  <span class="price-age ${getPriceAgeClass(ageTextPrevio)}">${ageTextPrevio}</span>
           ` : '<span style="color:#555;">-</span>'}
         </td>
@@ -410,7 +416,7 @@ function renderCalculations() {
         <td class="price-cell">
           <input type="text" inputmode="numeric" class="price-input venda-input" 
                  data-item="${refinadoId}" data-city="${cidade}" 
-                 value="${precoVenda > 0 ? precoVenda : ''}" placeholder="0">
+                 value="${precoVenda > 0 ? formatIntegerValue(precoVenda) : ''}" placeholder="0">
              <span class="price-age ${getPriceAgeClass(ageTextVenda)}">${ageTextVenda}</span>
         </td>
 
@@ -460,7 +466,9 @@ function setupTableInputs() {
     input.addEventListener('input', (e) => {
       const itemId = e.target.dataset.item;
       const city = e.target.dataset.city;
-      const value = e.target.value === '' ? null : Math.max(0, parseInt(e.target.value) || 0);
+      const rawValue = e.target.value;
+      const cleanedValue = String(rawValue).replace(/\./g, '').replace(/,/g, '').replace(/\s+/g, '');
+      const value = rawValue === '' ? null : Math.max(0, Number(cleanedValue) || 0);
 
       // Salva a alteração manual no estado persistente do LocalStorage
       setPriceOverride(itemId, city, value);
