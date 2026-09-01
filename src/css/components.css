@@ -208,9 +208,9 @@
 
 .toggle-row {
   display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 8px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
   width: 100%;
 }
 
@@ -221,9 +221,11 @@
   cursor: pointer;
   user-select: none;
   height: 36px;
-  white-space: nowrap;
+  white-space: normal;
   font-size: 11px;
   width: auto;
+  flex-wrap: wrap;
+  line-height: 1.4;
 }
 
 .toggle-row .switch-label {
@@ -251,6 +253,7 @@
   position: relative;
   transition: background-color 0.2s ease;
   border: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .switch-custom::after {
@@ -260,7 +263,7 @@
   background-color: #a0a0a5;
   border-radius: 50%;
   position: absolute;
-  top: 2px;
+  top: 3px;
   left: 2px;
   transition: all 0.2s ease;
 }
