@@ -16,14 +16,20 @@ A aplicação é focada em decisões práticas:
 
 ## Funcionalidades
 
-- cobertura de minério, madeira, couro, fibra e pedra
-- suporte de tiers de T2 a T8
-- filtro de encantamentos de .0 a .4
-- ranqueamento da melhor rota por margem por padrão, com priorização opcional de lucro líquido
-- prévia dinâmica da receita do item ao passar o mouse
-- modal de receita com imagem, fórmula e explicação de tier equivalente
-- sobrescrita manual de preços e preferências persistentes no localStorage
-- layout responsivo para desktop e mobile
+- **Cobertura Completa de Recursos**: Minério, Madeira, Couro, Fibra e Pedra
+- **Suporte de Tiers**: T2 a T8 com fórmulas específicas de refino
+- **Filtro de Encantamentos**: .0 a .4 com seleção múltipla (ou todos se vazio)
+- **Seleção de Critério**: Ranqueamento por margem de lucro (padrão) ou lucro líquido (opcional)
+- **Análise de Rotas**: Destaque automático da melhor rota considerando compra, refino e venda em cidades distintas
+- **Prévia de Receita**: Hover card com ingredientes necessários
+- **Modal de Receita Detalhado**: Imagem, fórmula, explicação de tier equivalente e encantamento
+- **Modais de Ajuda Educacionais**: Explicação de Custo Unitário, Lucro Unitário e Uso de Foco com fórmulas e exemplos práticos
+- **Edição Manual de Preços**: Todos os valores são editáveis inline sem sair da tela
+- **Reset de Preços**: Limpar sobrescrita e voltar aos valores da API com um clique
+- **Preferências Persistentes**: Todas as configurações (tier, recurso, encantamentos, taxa de estação, Premium/Foco) são salvas no localStorage
+- **Layout Responsivo**: Mobile-first com interface otimizada para smartphone e desktop
+- **Touch-Friendly**: Todos os controles com 44px mínimos para fácil acesso em telas mobile
+- **Dados em Tempo Real**: Integração com Albion Online Data Project (AODP) para preços atualizados
 
 ## Por que usar
 
@@ -67,49 +73,89 @@ Depois abra:
 http://localhost:8000
 ```
 
-## Estrutura do projeto
+## Estrutura do Projeto
 
 ```text
 AlbionCalc/
-├── .gitignore
-├── README.md
-├── index.html
-├── package.json
+├── index.html                      # Estrutura HTML única (SPA)
+├── package.json                    # Metadados e scripts
+├── README.md                       # Este arquivo
 ├── src/
 │   ├── css/
-│   │   ├── base.css
-│   │   ├── components.css
-│   │   ├── layout.css
-│   │   ├── modals.css
-│   │   └── responsive.css
+│   │   ├── base.css               # Variáveis, reset, estilos base
+│   │   ├── components.css         # Botões, inputs, cards, badges
+│   │   ├── layout.css             # Grid, sidebar, tabelas (mobile-first)
+│   │   ├── modals.css             # Diálogos e overlays
+│   │   └── responsive.css         # Media query desktop (768px+)
 │   └── js/
-│       ├── api.js
-│       ├── app.js
-│       ├── database.js
-│       ├── engine.js
-│       └── store.js
+│       ├── app.js                 # Controlador principal
+│       ├── api.js                 # Integração AODP + formatação
+│       ├── database.js            # Constantes e referências
+│       ├── engine.js              # Cálculos (RRR, nutrição, lucro)
+│       ├── help.js                # Gerador de conteúdo dos modais
+│       ├── recipes.js             # Gerenciador de modal de receita
+│       ├── render.js              # Renderização de tabelas
+│       ├── route.js               # Avaliador de melhor rota
+│       └── store.js               # Persistência em localStorage
 ```
 
-## Stack tecnológica
+## Stack Tecnológica
 
-- HTML5
-- CSS3
-- JavaScript ES Modules
-- Fetch API para dados do AODP
-- localStorage para persistência local
+- **Runtime**: JavaScript (Vanilla ES Modules)
+- **Apresentação**: HTML5 + Vanilla CSS 3
+- **Estado**: localStorage (browser nativo)
+- **Dados**: AODP API JSON via Fetch
+- **Testes**: Node.js test runner (built-in)
+
+## Como Usar
+
+### Seleção de Recurso
+1. Abra a seção de configurações (aba no topo em mobile, sidebar em desktop)
+2. Clique em um dos botões de recurso: Minério, Madeira, Couro, Fibra ou Pedra
+
+### Escolha de Tier
+3. Selecione um tier entre T2 e T8
+4. A tabela atualiza com os encantamentos disponíveis para esse tier
+
+### Filtro de Encantamentos
+5. Por padrão, apenas `.0` é mostrado
+6. Marque os encantamentos desejados (ou desmarque todos para ver tudo)
+
+### Configurar Cidades
+7. Selecione uma ou mais cidades para análise (Martlock, Lymhurst, Fort Sterling, etc.)
+8. A calculadora computa a melhor rota (menor custo de compra + maior preço de venda)
+
+### Ativar Premium/Foco
+9. Use os toggles para ativar Premium (reduz imposto) e/ou Foco (aumenta RRR)
+10. Ajuste a taxa da refinaria conforme necessário (padrão: 500 prata por 100 nutrição)
+
+### Editar Preços Manualmente
+11. Clique em qualquer célula de preço para editar manualmente (preços da API podem ser baixos)
+12. Use "Redefinir Preços" para restaurar valores da API
+
+### Entender a Melhor Rota
+13. A linha destacada mostra a combinação de cidades com maior margem (ou lucro se selecionado)
+14. Passe o mouse sobre o ícone do item refinado para ver ingredientes necessários
+15. Clique no ícone para abrir modal com fórmula completa e explicações
+
+### Modais de Ajuda
+16. Clique em `?` ao lado de "Custo Unitário", "Lucro Unitário" ou "Usar Foco" para entender cada métrica
+17. Os exemplos são gerados com base na melhor rota atual
+
+---
 
 ## Observações
 
-Este repositório é focado no fluxo de refino. O módulo de crafting ainda não está ativo como funcionalidade separada.
+- O módulo de Crafting não está desabilitado no momento (em breve).
+- A aplicação utiliza **nomenclatura nova** de insumos brutos e refinados alinhada com as convenções atuais de Albion Online.
+- Fórmulas de refino refletem a lógica de tier superior com equivalente de encantamento.
+- Suporte completo para **mobile-first**: confira no smartphone!
+- Todos os dados são **calculados no navegador**; nenhuma informação é enviada a servidores externos além da API AODP.
 
-A versão atual também está alinhada com as novas convenções de nomenclatura de insumos brutos e refinados e com a lógica de tier superior com equivalente de encantamento.
+## Fonte de Dados
 
-## Fonte de dados
-
-A aplicação usa dados públicos de mercado do Albion Online Data Project:
-
-https://www.albion-online-data.com/
+A aplicação usa dados públicos de mercado do [Albion Online Data Project](https://www.albion-online-data.com/). Os preços são atualizados em tempo real conforme a comunidade relata transações.
 
 ## Licença
 
-Este projeto é atualmente distribuído como ferramenta local para uso pessoal.
+Este projeto é distribuído como ferramenta local para uso pessoal.
