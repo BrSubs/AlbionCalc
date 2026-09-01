@@ -535,6 +535,7 @@ body {
 
 /* Células customizadas */
 .item-cell {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -547,6 +548,130 @@ body {
   background-color: rgba(255, 255, 255, 0.03);
   border-radius: 4px;
   object-fit: contain;
+  cursor: pointer;
+}
+
+.recipe-hover-card {
+  position: fixed;
+  z-index: 1250;
+  width: 220px;
+  background: #161b1d;
+  border: 1px solid rgba(223, 177, 91, 0.45);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.38);
+  padding: 10px 12px;
+  color: #f3f3f6;
+  pointer-events: none;
+}
+
+.recipe-hover-card.hidden,
+.recipe-modal.hidden {
+  display: none;
+}
+
+.recipe-hover-title {
+  color: var(--color-gold);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.recipe-hover-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.recipe-hover-item img {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+}
+
+.recipe-hover-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: #dfe1e5;
+}
+
+.recipe-hover-list li span {
+  color: var(--color-gold);
+  font-weight: 700;
+}
+
+.recipe-modal {
+  width: min(640px, calc(100vw - 24px));
+}
+
+.recipe-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.recipe-modal-header-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 4px 0 0;
+}
+
+.recipe-modal-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  object-fit: contain;
+}
+
+.recipe-modal-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.recipe-modal-item-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.recipe-modal-tier-note {
+  font-size: 12px;
+  color: #a0a0a5;
+}
+
+.recipe-modal-section {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.recipe-modal-ingredients {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #eef1f5;
+  line-height: 1.5;
+}
+
+.recipe-qty {
+  color: var(--color-gold);
+  font-weight: 700;
+}
+
+.recipe-modal-note {
+  color: #d8d8dd;
+  line-height: 1.6;
 }
 
 .city-cell {

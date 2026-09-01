@@ -1,4 +1,23 @@
-.backup
-docs
-tests
+# local project artifacts
+.backup/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# node dependency folders if used in the future
+node_modules/
+
+# generated or local runtime outputs
+coverage/
+.cache/
+.dist/
+
+docs/
+
+tests/
 server.ps1

@@ -1,108 +1,119 @@
 # Albion Calc
 
-## Decida onde refinar. Saiba quanto vai ganhar.
+Calculadora de refino para Albion Online, criada para ajudar o jogador a comparar rotas, custos e rentabilidade antes de investir prata.
 
-O **Albion Calc** é uma calculadora de refino para *Albion Online* que transforma preços de mercado em decisões práticas. Compare cidades, recursos e encantamentos, estime o custo real de produção e encontre a rota mais rentável antes de investir sua prata.
+## Visão geral
 
-Os preços são obtidos pelo [Albion Online Data Project (AODP)](https://www.albion-online-data.com/), enquanto as preferências e os ajustes manuais ficam salvos no próprio navegador.
+O Albion Calc ajuda a entender onde refinar, qual cidade entrega o melhor resultado e como cada insumo impacta o custo final por unidade. A ferramenta lê preços em tempo real do Albion Online Data Project e combina esses dados com configurações locais como premium, foco, taxa da refinaria e encantamentos selecionados.
+
+A aplicação é focada em decisões práticas:
+
+- comparar recursos e tiers
+- avaliar rentabilidade cidade a cidade
+- estimar custo unitário e lucro líquido
+- destacar a melhor rota automaticamente
+- inspecionar a receita do item refinado por hover e modal
+
+## Funcionalidades
+
+- cobertura de minério, madeira, couro, fibra e pedra
+- suporte de tiers de T2 a T8
+- filtro de encantamentos de .0 a .4
+- ranqueamento da melhor rota por margem por padrão, com priorização opcional de lucro líquido
+- prévia dinâmica da receita do item ao passar o mouse
+- modal de receita com imagem, fórmula e explicação de tier equivalente
+- sobrescrita manual de preços e preferências persistentes no localStorage
+- layout responsivo para desktop e mobile
 
 ## Por que usar
 
-Refinar sem comparar cidades pode consumir margem sem que você perceba. O Albion Calc reúne os dados essenciais em uma única visão:
+Em Albion Online, a diferença entre uma rota inteligente e uma ruim pode ser enorme. Esta ferramenta ajuda a responder perguntas como:
 
-- Qual cidade oferece o melhor custo de compra.
-- Onde o bônus regional favorece o refino.
-- Qual cidade apresenta o melhor preço de venda.
-- Quanto custa produzir cada unidade.
-- Qual é o lucro líquido estimado depois das taxas.
+- Onde devo refinar este item?
+- Qual cidade oferece o melhor custo de insumo?
+- Qual cidade vende o produto final pelo melhor valor?
+- O uso de foco realmente melhora o resultado?
+- Qual é a receita exata deste tier e encantamento?
 
-## Recursos
+## Começo rápido
 
-### Comparação de refino
+Como é uma aplicação web estática, você pode executá-la de algumas formas.
 
-Analise Minério, Madeira, Couro, Fibra e Pedra nos tiers T2 a T8. A tabela apresenta, por cidade:
+### Abrir diretamente no navegador
 
-- Preço do insumo bruto.
-- Preço do insumo refinado anterior, quando necessário.
-- Preço de venda do produto final.
-- Idade individual de cada preço.
-- Custo unitário de produção.
-- Lucro unitário e margem estimada.
+Abra a pasta do projeto e carregue o arquivo index.html no navegador.
 
-### Filtros rápidos
+### VS Code com Live Server
 
-- Seleção de recurso em um controle segmentado.
-- Filtro de tier de T2 a T8.
-- Filtro de encantamento `.0`, `.1`, `.2`, `.3` e `.4`.
-- `.0` selecionado por padrão.
-- Nenhum encantamento selecionado para exibir todos os encantamentos disponíveis.
-- Seleção das cidades analisadas.
-
-### Cálculo mais próximo da realidade
-
-O motor considera:
-
-- Taxa de Retorno de Recursos (RRR) por cidade.
-- Uso de foco.
-- Bônus regionais de refino.
-- Taxa de mercado com ou sem Premium.
-- Custo de nutrição e taxa da estação.
-- Ingredientes do tier atual e do tier anterior.
-
-### Controle sobre os dados
-
-Os preços da API podem ser editados diretamente na tabela. Isso permite simular ordens de compra, negociações ou preços observados no jogo. O botão **Redefinir preços** restaura os valores da API.
-
-## Como funciona
-
-1. Escolha o recurso que deseja refinar.
-2. Selecione o tier e os encantamentos de interesse.
-3. Marque as cidades que deseja comparar.
-4. Ajuste Premium, foco e taxa da refinaria.
-5. Analise o custo unitário, a margem e a melhor rota sugerida.
-
-No desktop, os controles ficam em uma sidebar fixa e aberta. Em telas menores, as configurações ficam em um painel recolhível para preservar o espaço da tabela.
-
-## Como executar
-
-O projeto é uma aplicação web estática, sem backend próprio, e pode ser utilizado de duas formas.
-
-### Acesso pelo GitHub Pages
-
-A aplicação está disponível online pelo GitHub Pages:
-
-**[Abrir o Albion Calc](https://brsubs.github.io/AlbionCalc/)**
-
-### Execução local com Live Server
-
-Para executar localmente, abra a pasta do projeto no VS Code e use a extensão **Live Server** para abrir o arquivo `index.html`. Isso inicia um servidor HTTP local adequado para os módulos ES6.
-
-Depois, abra o endereço fornecido pelo servidor, normalmente:
+1. Abra o projeto no VS Code
+2. Abra o arquivo index.html
+3. Execute com Live Server
+4. Acesse a URL local gerada pela extensão, normalmente:
 
 ```text
 http://localhost:5500
 ```
 
-## Tecnologias
+### Servidor local em Python
 
-- HTML5
-- CSS3 responsivo
-- JavaScript moderno com ES Modules
-- API pública do AODP
-- `localStorage` para preferências e ajustes de preços
-
-## Estrutura
-
-```text
-index.html              Interface principal
-src/css/styles.css      Estilos responsivos
-src/js/app.js           Controle da aplicação e renderização
-src/js/api.js           Integração com a AODP
-src/js/database.js      Receitas, valores e bônus regionais
-src/js/engine.js        Fórmulas puras de cálculo
-src/js/store.js         Preferências e preços personalizados
+```bash
+cd AlbionCalc
+python -m http.server 8000
 ```
 
-## Estado do projeto
+Depois abra:
 
-O módulo de **Refino** está disponível e utiliza dados reais de mercado. O módulo de **Crafting** aparece na interface como uma funcionalidade planejada para uma próxima etapa.
+```text
+http://localhost:8000
+```
+
+## Estrutura do projeto
+
+```text
+AlbionCalc/
+├── index.html
+├── README.md
+├── .gitignore
+├── package.json
+├── docs/
+│   ├── api-contract.md
+│   ├── architecture.md
+│   ├── business-rules.md
+│   └── ui-ux.md
+├── src/
+│   ├── css/
+│   │   └── styles.css
+│   └── js/
+│       ├── api.js
+│       ├── app.js
+│       ├── database.js
+│       ├── engine.js
+│       └── store.js
+├── tests/
+├── .backup/
+└── server.ps1
+```
+
+## Stack tecnológica
+
+- HTML5
+- CSS3
+- JavaScript ES Modules
+- Fetch API para dados do AODP
+- localStorage para persistência local
+
+## Observações
+
+Este repositório é focado no fluxo de refino. O módulo de crafting ainda não está ativo como funcionalidade separada.
+
+A versão atual também está alinhada com as novas convenções de nomenclatura de insumos brutos e refinados e com a lógica de tier superior com equivalente de encantamento.
+
+## Fonte de dados
+
+A aplicação usa dados públicos de mercado do Albion Online Data Project:
+
+https://www.albion-online-data.com/
+
+## Licença
+
+Este projeto é atualmente distribuído como ferramenta local para uso pessoal. Se você pretende publicar ou distribuir externamente, adicione um arquivo de licença antes de fazê-lo.

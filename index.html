@@ -160,6 +160,38 @@
     </div>
     <!-- /main-layout -->
 
+    <div id="recipe-hover-card" class="recipe-hover-card hidden" aria-live="polite"></div>
+
+    <div class="help-modal-overlay hidden" id="recipe-modal" aria-hidden="true">
+      <div class="help-modal recipe-modal" role="dialog" aria-modal="true" aria-labelledby="recipe-modal-title">
+        <div class="help-modal-header">
+          <h3 id="recipe-modal-title">Receita de refino</h3>
+          <button type="button" class="help-modal-close" id="recipe-modal-close" aria-label="Fechar receita">×</button>
+        </div>
+        <div class="help-modal-body recipe-modal-body">
+          <div class="recipe-modal-header-row">
+            <img id="recipe-modal-image" class="recipe-modal-image" alt="Item refinado" />
+            <div class="recipe-modal-heading">
+              <div id="recipe-modal-item-name" class="recipe-modal-item-name"></div>
+              <div id="recipe-modal-tier-note" class="recipe-modal-tier-note"></div>
+            </div>
+          </div>
+          <div class="recipe-modal-section">
+            <div class="formula-label">Receita</div>
+            <ul id="recipe-modal-ingredients" class="recipe-modal-ingredients"></ul>
+          </div>
+          <div class="recipe-modal-section">
+            <div class="formula-label">Fórmula</div>
+            <div id="recipe-modal-formula" class="formula-text"></div>
+          </div>
+          <div class="recipe-modal-section">
+            <div class="formula-label">Observação</div>
+            <div id="recipe-modal-note" class="recipe-modal-note"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 7. Rodapé / Botão de Reset de Preços -->
     <footer class="app-footer">
       <div class="footer-info">Dados obtidos via AODP.</div>

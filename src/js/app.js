@@ -21,6 +21,15 @@ const elements = {
   chkFocus: document.getElementById('chk-focus'),
   chkPriorizarLucro: document.getElementById('chk-priorizar-lucro'),
   txtTaxaEstacao: document.getElementById('txt-taxa-estacao'),
+  recipeHoverCard: document.getElementById('recipe-hover-card'),
+  recipeModal: document.getElementById('recipe-modal'),
+  recipeModalClose: document.getElementById('recipe-modal-close'),
+  recipeModalImage: document.getElementById('recipe-modal-image'),
+  recipeModalItemName: document.getElementById('recipe-modal-item-name'),
+  recipeModalTierNote: document.getElementById('recipe-modal-tier-note'),
+  recipeModalIngredients: document.getElementById('recipe-modal-ingredients'),
+  recipeModalFormula: document.getElementById('recipe-modal-formula'),
+  recipeModalNote: document.getElementById('recipe-modal-note'),
   resourceSelector: document.getElementById('resource-selector'),
   tierSelector: document.getElementById('tier-selector'),
   enchantmentFilter: document.getElementById('enchantment-filter'),
@@ -60,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupCostHelpModal();
   setupProfitHelpModal();
   setupFocusHelpModal();
+  setupRecipeModal();
   buildCostUnitHelpContent();
   buildProfitUnitHelpContent();
   buildFocusHelpContent();
@@ -186,6 +196,129 @@ function setupEventListeners() {
 // Salva as configurações de tela atuais no LocalStorage
 function updateStore() {
   savePreferences(activePreferences);
+}
+
+function buildRecipeData(resource, tier, enc) {
+  const labels = getResourceLabels(resource);
+  const formula = RECEITAS_REFINO[tier] ?? { bruto: 1, refinadoAnterior: 0 };
+  const itemResultado = `${labels.refinado} T${tier}.${enc}`;
+  const prevTier = tier - 1;
+  const prevEnc = tier >= 5 ? enc : 0;
+  const itemAnterior = tier > 2 ? `${labels.anterior} T${prevTier}.${prevEnc}` : null;
+
+  const brutoName = `${labels.bruto} T${tier}.${enc}`;
+  const ingredientes = [
+    {
+      name: brutoName,
+      quantity: formula.bruto,
+      isMain: true
+    }
+  ];
+
+  if (tier > 2 && formula.refinadoAnterior) {
+    ingredientes.push({
+      name: itemAnterior,
+      quantity: formula.refinadoAnterior,
+      isMain: false
+    });
+  }
+
+  const formulaText = tier > 2 && formula.refinadoAnterior
+    ? `${formula.bruto} × ${labels.bruto} T${tier}.${enc} + ${formula.refinadoAnterior} × ${labels.anterior} T${prevTier}.${prevEnc} = 1 × ${labels.refinado} T${tier}.${enc}`
+    : `${formula.bruto} × ${labels.bruto} T${tier}.${enc} = 1 × ${labels.refinado} T${tier}.${enc}`;
+
+  const note = tier >= 5
+    ? `Para tier 5+, o item do tier anterior precisa usar o mesmo encantamento equivalente do refinado atual.`
+    : 'No tier atual, o insumo anterior é usado sem encantar ou com o equivalente do mesmo tier anterior quando aplicável.';
+
+  return {
+    resource,
+    tier,
+    enc,
+    itemResultado,
+    brutoName,
+    itemAnterior,
+    ingredientes,
+    formulaText,
+    note,
+    itemId: buildEncantadoId(RESOURCE_TYPES[resource].refinado_prefix.replace('{tier}', tier), enc)
+  };
+}
+
+function renderRecipeHoverCard(event, resource, tier, enc) {
+  const card = elements.recipeHoverCard;
+  if (!card) return;
+
+  const data = buildRecipeData(resource, tier, enc);
+  const itemUrl = `https://render.albiononline.com/v1/item/${data.itemId}.png?size=40`;
+
+  card.innerHTML = `
+    <div class="recipe-hover-title">Receita</div>
+    <div class="recipe-hover-item">
+      <img src="${itemUrl}" alt="${data.itemResultado}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'40\' height=\'40\' fill=\'%23232329\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23fff\' font-size=\'10\'>T${tier}.${enc}</text></svg>'">
+      <strong>${data.itemResultado}</strong>
+    </div>
+    <ul class="recipe-hover-list">
+      ${data.ingredientes.map(item => `<li><span>${item.quantity} ×</span> ${item.name}</li>`).join('')}
+    </ul>
+  `;
+
+  const rect = event.target.getBoundingClientRect();
+  card.style.left = `${Math.min(window.innerWidth - 220, rect.right + 14)}px`;
+  card.style.top = `${Math.max(16, rect.top - 8)}px`;
+  card.classList.remove('hidden');
+}
+
+function hideRecipeHoverCard() {
+  if (elements.recipeHoverCard) {
+    elements.recipeHoverCard.classList.add('hidden');
+  }
+}
+
+function openRecipeModal(resource, tier, enc) {
+  const recipe = buildRecipeData(resource, tier, enc);
+  if (!elements.recipeModal || !elements.recipeModalImage || !elements.recipeModalIngredients || !elements.recipeModalFormula || !elements.recipeModalNote || !elements.recipeModalItemName || !elements.recipeModalTierNote) return;
+
+  const itemUrl = `https://render.albiononline.com/v1/item/${recipe.itemId}.png?size=80`;
+  elements.recipeModalImage.src = itemUrl;
+  elements.recipeModalImage.alt = recipe.itemResultado;
+  elements.recipeModalItemName.textContent = recipe.itemResultado;
+  elements.recipeModalTierNote.textContent = `Tier ${tier} • Encantamento ${enc}`;
+  elements.recipeModalIngredients.innerHTML = recipe.ingredientes.map(item => `<li><span class="recipe-qty">${item.quantity} ×</span> ${item.name}</li>`).join('');
+  elements.recipeModalFormula.textContent = recipe.formulaText;
+  elements.recipeModalNote.textContent = recipe.note;
+
+  elements.recipeModal.classList.remove('hidden');
+  elements.recipeModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeRecipeModal() {
+  if (!elements.recipeModal) return;
+  elements.recipeModal.classList.add('hidden');
+  elements.recipeModal.setAttribute('aria-hidden', 'true');
+}
+
+function setupRecipeInteraction() {
+  if (!elements.tableBody) return;
+
+  elements.tableBody.querySelectorAll('.item-icon').forEach(icon => {
+    icon.addEventListener('mouseenter', (event) => {
+      const resource = event.target.dataset.resource;
+      const tier = Number(event.target.dataset.tier);
+      const enc = Number(event.target.dataset.enc);
+      if (!resource || !tier && tier !== 0) return;
+      renderRecipeHoverCard(event, resource, tier, enc);
+    });
+
+    icon.addEventListener('mouseleave', hideRecipeHoverCard);
+    icon.addEventListener('click', (event) => {
+      const resource = event.target.dataset.resource;
+      const tier = Number(event.target.dataset.tier);
+      const enc = Number(event.target.dataset.enc);
+      if (!resource || Number.isNaN(tier) || Number.isNaN(enc)) return;
+      openRecipeModal(resource, tier, enc);
+    });
+  });
 }
 
 function buildCostUnitHelpContent() {
@@ -452,6 +585,26 @@ function setupFocusHelpModal() {
   }
 }
 
+function setupRecipeModal() {
+  if (elements.recipeModalClose) {
+    elements.recipeModalClose.addEventListener('click', closeRecipeModal);
+  }
+
+  if (elements.recipeModal) {
+    elements.recipeModal.addEventListener('click', (event) => {
+      if (event.target === elements.recipeModal) {
+        closeRecipeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !elements.recipeModal.classList.contains('hidden')) {
+        closeRecipeModal();
+      }
+    });
+  }
+}
+
 // app.js
 function buildEncantadoId(baseId, enc) {
   return enc === 0 ? baseId : `${baseId}_LEVEL${enc}@${enc}`;
@@ -688,7 +841,7 @@ function renderCalculations() {
       tr.innerHTML = `
         <td>
           <div class="item-cell">
-            <img class="item-icon" src="${cdnUrl}" alt="${nomeItem}" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'40\' height=\'40\' fill=\'%23232329\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23fff\' font-size=\'10\'>T${tier}.${enc}</text></svg>'">
+            <img class="item-icon" src="${cdnUrl}" alt="${nomeItem}" data-resource="${resource}" data-tier="${tier}" data-enc="${enc}" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'40\' height=\'40\' fill=\'%23232329\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23fff\' font-size=\'10\'>T${tier}.${enc}</text></svg>'">
             <span>T${tier}.${enc}</span>
           </div>
         </td>
@@ -738,6 +891,7 @@ function renderCalculations() {
 
   // 5. Acopla os event listeners dinâmicos de digitação para sobrescrever preços na hora
   setupTableInputs();
+  setupRecipeInteraction();
 
   // 6. Atualiza o card da melhor rota
   renderBestRoute(rotasCalculadas);
