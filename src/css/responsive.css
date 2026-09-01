@@ -1,0 +1,111 @@
+/* responsive.css - desktop and small-screen adjustments */
+
+@media (min-width: 768px) {
+  .app-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 24px 32px 20px;
+  }
+
+  .app-header {
+    padding: 0 0 14px;
+    margin-bottom: 14px;
+  }
+
+  .main-tabs {
+    max-width: 360px;
+  }
+
+  .resource-nav {
+    gap: 8px;
+    margin-bottom: 0;
+  }
+
+  .res-btn {
+    min-width: 120px;
+  }
+
+  .main-layout {
+    display: grid;
+    grid-template-columns: 360px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+    transition: grid-template-columns 0.22s ease;
+  }
+
+  .config-section {
+    margin-bottom: 0;
+    position: sticky;
+    top: 24px;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
+    transition: width 0.22s ease;
+  }
+
+  .content-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .decision-card,
+  .main-content {
+    margin-bottom: 0;
+  }
+
+  .decision-card {
+    padding: 18px 20px;
+    border-left: 3px solid var(--color-profit);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  }
+
+  .decision-title {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+
+  .decision-text {
+    max-width: 980px;
+    font-size: 14px;
+  }
+
+  .table-container {
+    margin-bottom: 0;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2);
+  }
+
+  .refine-table {
+    min-width: 860px;
+  }
+
+  .refine-table th {
+    padding: 13px 12px;
+    white-space: nowrap;
+  }
+
+  .refine-table td {
+    padding: 12px;
+  }
+
+  .refine-table tbody tr {
+    transition: background-color 0.18s ease;
+  }
+
+  .refine-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.025);
+  }
+
+  .app-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 0 0;
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 0 18px;
+  }
+
+  .app-footer {
+    justify-content: flex-end;
+  }
+}

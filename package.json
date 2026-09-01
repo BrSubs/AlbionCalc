@@ -4,6 +4,6 @@
   "type": "module",
   "description": "Calculadora de refino de Albion Online",
   "scripts": {
-    "test": "node --test tests/engine.test.js"
+    "test": "node --test tests/formatting.test.js"
   }
 }
