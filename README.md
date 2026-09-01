@@ -71,15 +71,10 @@ http://localhost:8000
 
 ```text
 AlbionCalc/
-├── index.html
-├── README.md
 ├── .gitignore
+├── README.md
+├── index.html
 ├── package.json
-├── docs/
-│   ├── api-contract.md
-│   ├── architecture.md
-│   ├── business-rules.md
-│   └── ui-ux.md
 ├── src/
 │   ├── css/
 │   │   └── styles.css
@@ -89,9 +84,6 @@ AlbionCalc/
 │       ├── database.js
 │       ├── engine.js
 │       └── store.js
-├── tests/
-├── .backup/
-└── server.ps1
 ```
 
 ## Stack tecnológica
@@ -116,4 +108,4 @@ https://www.albion-online-data.com/
 
 ## Licença
 
-Este projeto é atualmente distribuído como ferramenta local para uso pessoal. Se você pretende publicar ou distribuir externamente, adicione um arquivo de licença antes de fazê-lo.
+Este projeto é atualmente distribuído como ferramenta local para uso pessoal.
